@@ -1,4 +1,5 @@
-import { app, BrowserWindow } from "electron";
+import { IPC_ACTIONS } from "@diographita/core";
+import { app, BrowserWindow, ipcMain } from "electron";
 import { join } from "path";
 
 let mainWindow: BrowserWindow;
@@ -21,6 +22,27 @@ const createWindow = () => {
   //   mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
   // }
 };
+
+// ipcMain.handle(IPC_ACTIONS.SELECT_FOLDER, async () => {
+//   const result = await dialog.showOpenDialog(mainWindow, {
+//     properties: ["openDirectory"],
+//   });
+
+//   if (!result.canceled && result.filePaths.length > 0) {
+//     const folderPath = result.filePaths[0];
+//     const config = getConfig();
+//     config.folderPath = folderPath;
+//     saveConfig(config);
+
+//     return { success: true, data: folderPath };
+//   }
+
+//   return { success: false, error: "No folder selected" };
+// });
+
+ipcMain.handle(IPC_ACTIONS.HELLO_WORLD, async () => {
+  return "Hello world!123";
+});
 
 app.whenReady().then(() => {
   createWindow();

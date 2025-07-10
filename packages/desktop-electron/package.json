@@ -6,10 +6,11 @@
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
-    "dev": "yarn build && electron ."
+    "dev": "electron ."
   },
   "dependencies": {
-    "@diograph/folder-generator": "0.1.2-rc1"
+    "@diograph/folder-generator": "0.1.2-rc1",
+    "@diographita/core": "*"
   },
   "devDependencies": {
     "@types/node": "^24.0.12",
