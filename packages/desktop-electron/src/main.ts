@@ -14,12 +14,12 @@ const createWindow = () => {
     },
   });
 
-  if (process.env.NODE_ENV === "development") {
-    mainWindow.loadURL("http://localhost:5173");
-    mainWindow.webContents.openDevTools();
-  } else {
-    mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
-  }
+  // if (process.env.NODE_ENV === "development") {
+  mainWindow.loadURL("http://localhost:5173");
+  mainWindow.webContents.openDevTools();
+  // } else {
+  //   mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
+  // }
 };
 
 app.whenReady().then(() => {
