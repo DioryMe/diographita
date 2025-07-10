@@ -6,7 +6,7 @@
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
-    "build-watch": "tsc --watch"
+    "dev": "tsc --watch"
   },
   "dependencies": {
     "@diograph/folder-generator": "0.1.2-rc1",

@@ -6,11 +6,10 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace=packages/desktop-client",
-    "build:all": "npm run build:core && npm run build:renderer && npm run build:main",
-    "build:core": "npm run build --workspace=packages/core",
-    "build:renderer": "npm run build --workspace=packages/desktop-client",
-    "build:main": "npm run build --workspace=packages/desktop-electron"
+    "dev": "yarn workspaces foreach -Aip run dev",
+    "build:core": "yarn workspace @diographita/core run build",
+    "build:renderer": "yarn workspace @diographita/desktop-client run build",
+    "build:main": "yarn workspace @diographita/desktop-electron run build"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
@@ -20,5 +19,6 @@
     "eslint-plugin-react": "^7.0.0",
     "eslint-plugin-react-hooks": "^4.0.0",
     "typescript": "^5.0.0"
-  }
+  },
+  "packageManager": "yarn@4.9.2"
 }
