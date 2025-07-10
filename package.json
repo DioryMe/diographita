@@ -1,0 +1,11 @@
+{
+  "name": "diographita",
+  "version": "0.0.1",
+  "description": "Electron and React based application for reading local folders with @diograph libraries",
+  "author": "Jouni Alanen <jouni@diory.me>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}

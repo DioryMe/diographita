@@ -1,0 +1,16 @@
+{
+  "name": "@diographita/desktop-electron",
+  "version": "0.0.1",
+  "description": "Electron wrapper",
+  "license": "MIT",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@diograph/folder-generator": "0.1.2-rc1"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
