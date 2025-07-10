@@ -1,11 +1,24 @@
 {
   "name": "diographita",
   "version": "0.0.1",
-  "description": "Electron and React based application for reading local folders with @diograph libraries",
-  "author": "Jouni Alanen <jouni@diory.me>",
-  "license": "MIT",
   "private": true,
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=packages/desktop-client",
+    "build:all": "npm run build:core && npm run build:renderer && npm run build:main",
+    "build:core": "npm run build --workspace=packages/core",
+    "build:renderer": "npm run build --workspace=packages/desktop-client",
+    "build:main": "npm run build --workspace=packages/desktop-electron"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-react": "^7.0.0",
+    "eslint-plugin-react-hooks": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
 }
