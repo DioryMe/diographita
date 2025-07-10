@@ -7,6 +7,8 @@
   ],
   "scripts": {
     "dev": "yarn build:main && yarn workspaces foreach -Aip run dev",
+    "start": "yarn build && yarn workspace @diographita/desktop-electron run dev",
+    "build": "yarn workspaces foreach -A run build",
     "build:core": "yarn workspace @diographita/core run build",
     "build:renderer": "yarn workspace @diographita/desktop-client run build",
     "build:main": "yarn workspace @diographita/desktop-electron run build"
