@@ -1,25 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const App: React.FC = () => {
-  let content = "J667";
-  let error = "123";
+  const [content, setContent] = useState("-");
+  const [error, setError] = useState("-");
 
-  console.log("asdddd", window.electronAPI);
-
-  window.electronAPI
-    .helloWorld()
-    .then((result: any) => {
-      content = result;
-    })
-    .catch((e) => {
-      console.log("e", e);
-      error = e;
-    });
+  useEffect(() => {
+    window.electronAPI
+      .helloWorld()
+      .then((result: any) => {
+        setContent(result);
+      })
+      .catch((e) => {
+        setError(e);
+      });
+  }, []);
 
   return (
     <div>
-      <div>{error}</div>
       <div>{content}</div>
+      <div>{error}</div>
     </div>
   );
 };

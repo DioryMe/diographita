@@ -16,10 +16,10 @@ const createWindow = () => {
   });
 
   // if (process.env.NODE_ENV === "development") {
-  //   mainWindow.loadURL("http://localhost:5173");
-  //   mainWindow.webContents.openDevTools();
+  mainWindow.loadURL("http://localhost:5173");
+  mainWindow.webContents.openDevTools();
   // } else {
-  mainWindow.loadFile(join(__dirname, "../../desktop-client/dist/index.html"));
+  // mainWindow.loadFile(join(__dirname, "../../desktop-client/dist/index.html"));
   // }
 };
 
