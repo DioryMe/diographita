@@ -19,7 +19,7 @@ const createWindow = () => {
   mainWindow.loadURL("http://localhost:5173");
   mainWindow.webContents.openDevTools();
   // } else {
-  // mainWindow.loadFile(join(__dirname, "../../desktop-client/dist/index.html"));
+  // mainWindow.loadFile(join(__dirname, "desktop-client", "dist", "index.html"));
   // }
 };
 
