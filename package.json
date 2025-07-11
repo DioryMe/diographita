@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "yarn build:main && yarn workspaces foreach -Aip run dev",
+    "dev": "yarn build:core && yarn build:main && yarn workspaces foreach -Aip run dev",
     "start": "yarn build && yarn workspace @diographita/desktop-electron run dev",
     "build": "yarn workspaces foreach -A run build",
     "build:core": "yarn workspace @diographita/core run build",

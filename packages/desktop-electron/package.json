@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@diograph/folder-generator": "0.1.2-rc1",
-    "@diographita/core": "*"
+    "@diographita/core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^24.0.12",

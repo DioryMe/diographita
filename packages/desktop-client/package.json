@@ -7,7 +7,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@diographita/core": "*",
+    "@diographita/core": "workspace:*",
     "@reduxjs/toolkit": "^2.8.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
