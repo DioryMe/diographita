@@ -61,6 +61,7 @@ ipcMain.handle(
   IPC_ACTIONS.GET_DIORY_INFO,
   async (event, focusId: string, storyId?: string | null) => {
     try {
+      const focusId = "e07c2f1d-5f5a-488a-a505-34f7b9f55105";
       const dioryInfo = getDioryInfo(focusId, storyId);
       const dioryState = {
         focusId: dioryInfo.focusId,
