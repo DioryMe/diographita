@@ -1,40 +1,12 @@
-// import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux"; // updated import for dispatch hook
+import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
-import { setFocus } from "./store/diorySlice";
-import { useEffect } from "react";
 import { FiImage, FiRefreshCcw, FiVideo } from "react-icons/fi";
-// import styles from "./ContentSwipes.module.css";
-
 // import { loadDioryContent } from "./store/diorySlice";
-// import { FiImage, FiRefreshCcw, FiVideo } from "react-icons/fi";
-
-// export const DioryContent = () => {
-//   const dispatch = useDispatch();
-
-//   const { focusDiory } = useSelector((state: RootState) => state.diory.focus);
-
-//   useEffect(() => {
-//     dispatch(setFocus({ focusId: "asdf" }));
-//   }, [dispatch]);
-
-//   if (focusDiory) {
-//     return <div>{focusDiory.text}</div>;
-//   }
-
-//   return "Loading...";
-// };
 
 export const DioryContent = () => {
-  const dispatch = useDispatch();
-
   const { focusDiory: diory } = useSelector(
     (state: RootState) => state.diory.focus
   );
-
-  useEffect(() => {
-    dispatch(setFocus({ focusId: "asdf" }));
-  }, [dispatch]);
 
   const dioryContent = null; //  diory && contentUrls[diory.id];
 

@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { DioryContent } from "./DioryContent";
 import DioryGrid from "./DioryGrid";
+import { setFocus } from "./store/diorySlice";
+import { useDispatch } from "react-redux";
 
 const App: React.FC = () => {
+  const dispatch = useDispatch();
+
   const [content, setContent] = useState("-");
   const [folderPath, setFolderPath] = useState("-");
 
@@ -21,6 +25,10 @@ const App: React.FC = () => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    dispatch(setFocus({ focusId: "asdf" }));
+  }, [dispatch]);
 
   return (
     <div>
