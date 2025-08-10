@@ -62,8 +62,10 @@ ipcMain.handle(
   async (event, focusId: string, storyId?: string | null) => {
     try {
       const dioryInfo = getDioryInfo(focusId, storyId);
-      const safeData = JSON.parse(JSON.stringify(dioryInfo));
-      return { success: true, data: safeData };
+      console.log("dioryInfo", dioryInfo.focus.linkedDiories);
+      // const safeData = JSON.parse(JSON.stringify(dioryInfo));
+      // console.log("dioryInfo2", dioryInfo.focus.linkedDiories);
+      return { success: true, data: dioryInfo };
     } catch (error) {
       console.log("errr", error);
 

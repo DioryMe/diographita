@@ -5,7 +5,7 @@ import { IDataObject, IDiory, IDioryObject } from "@diograph/diograph/types";
 export interface DioryInfo {
   focusId: string;
   storyId: string | null;
-  story: IDiory | null;
+  story: IDioryObject | null;
   stories: IDioryObject[];
   prev: string | null;
   next: string | null;
@@ -15,10 +15,10 @@ export interface DioryInfo {
     latlng: string | null;
     date: string | null;
     links: string[];
-    linkedDiories: IDiory[];
+    linkedDiories: IDioryObject[];
     data: IDataObject | null;
   };
-  focusDiory: IDiory | null;
+  focusDiory: IDioryObject | null;
 }
 
 export const getDioryInfo = (
@@ -63,7 +63,9 @@ export const getDioryInfo = (
   return {
     focusId: focusDiory.id,
     storyId: storyDioryId,
-    story: storyDioryId ? diograph.getDiory({ id: storyDioryId }) : null,
+    story: storyDioryId
+      ? diograph.getDiory({ id: storyDioryId }).toObject()
+      : null,
     stories: stories,
     prev,
     next,
@@ -75,9 +77,10 @@ export const getDioryInfo = (
       date: date || null,
       links: focusDiory.links?.map((link) => link.id) || [],
       linkedDiories:
-        focusDiory.links?.map((link) => diograph.getDiory({ id: link.id })) ||
-        [],
+        focusDiory.links?.map((link) =>
+          diograph.getDiory({ id: link.id }).toObject()
+        ) || [],
     },
-    focusDiory,
+    focusDiory: focusDiory.toObject(),
   };
 };
