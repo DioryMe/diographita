@@ -11,21 +11,17 @@ import { useEffect } from "react";
 export const DioryContent = () => {
   const dispatch = useDispatch();
 
-  const { focusDiory, prevId } = useSelector(
-    (state: RootState) => state.diory.diory
-  );
+  const { focusDiory } = useSelector((state: RootState) => state.diory.diory);
 
   useEffect(() => {
     dispatch(setFocus({ focusId: "asdf" }));
-    console.log("focusDiory", focusDiory);
-    console.log("prevId", prevId);
   }, [dispatch]);
 
-  return (
-    <div>
-      Jee {focusDiory && focusDiory.text} {prevId}
-    </div>
-  );
+  if (focusDiory) {
+    return <div>{focusDiory.text}</div>;
+  }
+
+  return "Loading...";
 };
 /*
 export const DioryContent = () => {
