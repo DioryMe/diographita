@@ -14,9 +14,11 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    window.electronAPI.helloWorld().then((result: any) => {
-      setContent(result);
-    });
+    if (window.electronAPI) {
+      window.electronAPI.helloWorld().then((result: any) => {
+        setContent(result);
+      });
+    }
   }, []);
 
   return (
