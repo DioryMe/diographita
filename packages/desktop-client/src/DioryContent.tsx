@@ -28,14 +28,9 @@ import { FiImage, FiRefreshCcw, FiVideo } from "react-icons/fi";
 export const DioryContent = () => {
   const dispatch = useDispatch();
 
-  const {
-    focusDiory: diory,
-    storyId,
-    focusId,
-    prevId,
-    nextId,
-    contentUrls,
-  } = useSelector((state: RootState) => state.diory.focus);
+  const { focusDiory: diory } = useSelector(
+    (state: RootState) => state.diory.focus
+  );
 
   useEffect(() => {
     dispatch(setFocus({ focusId: "asdf" }));

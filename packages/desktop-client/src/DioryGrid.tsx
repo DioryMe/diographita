@@ -1,11 +1,14 @@
 import React from "react";
-import { Diory } from "@diographita/core";
+import { useSelector } from "react-redux";
+import { RootState } from "./store/store";
 
-interface DioryGridProps {
-  diories: Diory[];
-}
+interface DioryGridProps {}
 
-const DioryGrid: React.FC<DioryGridProps> = ({ diories }) => {
+const DioryGrid: React.FC<DioryGridProps> = () => {
+  const { stories: diories } = useSelector(
+    (state: RootState) => state.diory.focus
+  );
+
   return (
     <div
       style={{

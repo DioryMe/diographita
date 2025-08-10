@@ -33,14 +33,14 @@ const initialState: DioryState = {
 // const maryDiograph = JSON.parse(diographMaryJson)
 const getDioryState = (focusId, storyId) => {
   const focusDiory = diographMaryJson["e07c2f1d-5f5a-488a-a505-34f7b9f55105"];
-  const linkedDiory = diographMaryJson["5c63b738-2bc0-449c-80a8-be04dfe1e8b4"];
+  const linkedDiories = Object.values(diographMaryJson);
   return {
     focusDiory,
     storyDiory: null,
     storyDiories: [],
     prevId: null,
     nextId: null,
-    stories: [linkedDiory],
+    stories: linkedDiories,
     CID: null,
     mimeType: null,
   };
