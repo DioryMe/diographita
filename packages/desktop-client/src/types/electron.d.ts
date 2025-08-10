@@ -9,6 +9,10 @@ declare global {
       generateDiograph: (folderPath: string) => Promise<IPCResponse<void>>;
       loadDiograph: (folderPath: string) => Promise<IPCResponse<DiographData>>;
       getDiories: () => Promise<IPCResponse<Diory[]>>;
+      getDioryInfo: (
+        focusId: string,
+        storyId?: string | null
+      ) => Promise<IPCResponse<DioryInfo>>;
     };
   }
 }

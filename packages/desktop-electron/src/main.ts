@@ -1,6 +1,7 @@
 import { IPC_ACTIONS } from "@diographita/core";
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import { join } from "path";
+import { getDioryInfo } from "./dioryInfo.util";
 
 let mainWindow: BrowserWindow;
 
@@ -55,3 +56,21 @@ ipcMain.handle(IPC_ACTIONS.SELECT_FOLDER, async () => {
 ipcMain.handle(IPC_ACTIONS.HELLO_WORLD, async () => {
   return "Hello world!123";
 });
+
+ipcMain.handle(
+  IPC_ACTIONS.GET_DIORY_INFO,
+  async (event, focusId: string, storyId?: string | null) => {
+    try {
+      const dioryInfo = getDioryInfo(focusId, storyId);
+      const safeData = JSON.parse(JSON.stringify(dioryInfo));
+      return { success: true, data: safeData };
+    } catch (error) {
+      console.log("errr", error);
+
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      };
+    }
+  }
+);

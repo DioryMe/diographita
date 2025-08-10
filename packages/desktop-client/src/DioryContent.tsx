@@ -1,12 +1,17 @@
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import { FiImage, FiRefreshCcw, FiVideo } from "react-icons/fi";
+import { useEffect } from "react";
 // import { loadDioryContent } from "./store/diorySlice";
 
 export const DioryContent = () => {
   const { focusDiory: diory } = useSelector(
     (state: RootState) => state.diory.focus
   );
+
+  useEffect(() => {
+    console.log("diory", diory);
+  }, [diory]);
 
   const dioryContent = null; //  diory && contentUrls[diory.id];
 

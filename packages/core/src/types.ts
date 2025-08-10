@@ -37,6 +37,7 @@ export const IPC_ACTIONS = {
   LOAD_DIOGRAPH: "LOAD_DIOGRAPH",
   GET_DIORIES: "GET_DIORIES",
   SAVE_DIORY: "SAVE_DIORY",
+  GET_DIORY_INFO: "GET_DIORY_INFO",
 } as const;
 
 export type IPCAction = keyof typeof IPC_ACTIONS;
