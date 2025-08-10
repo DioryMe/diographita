@@ -11,7 +11,9 @@ import { useEffect } from "react";
 export const DioryContent = () => {
   const dispatch = useDispatch();
 
-  const { focusDiory, prevId } = useSelector((state: RootState) => state.diory);
+  const { focusDiory, prevId } = useSelector(
+    (state: RootState) => state.diory.diory
+  );
 
   useEffect(() => {
     dispatch(setFocus({ focusId: "asdf" }));

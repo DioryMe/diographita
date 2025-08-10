@@ -3,27 +3,31 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import diographMaryJson from "../../mary-json.json";
 
 interface DioryState {
-  focusDiory: IDioryObject | null;
-  storyDiory: IDioryObject | null;
-  // focusId: string | null; => focusDiory.id
-  // storyId: string | null; => storyDiory.id
-  storyDiories: IDioryObject[];
-  prevId: string | null;
-  nextId: string | null;
-  stories: IDioryObject[];
-  CID: string | null;
-  mimeType: string | null;
+  diory: {
+    focusDiory: IDioryObject | null;
+    storyDiory: IDioryObject | null;
+    // focusId: string | null; => focusDiory.id
+    // storyId: string | null; => storyDiory.id
+    storyDiories: IDioryObject[];
+    prevId: string | null;
+    nextId: string | null;
+    stories: IDioryObject[];
+    CID: string | null;
+    mimeType: string | null;
+  };
 }
 
 const initialState: DioryState = {
-  focusDiory: null,
-  storyDiory: null,
-  storyDiories: [],
-  prevId: null,
-  nextId: null,
-  stories: [],
-  CID: null,
-  mimeType: null,
+  diory: {
+    focusDiory: null,
+    storyDiory: null,
+    storyDiories: [],
+    prevId: null,
+    nextId: null,
+    stories: [],
+    CID: null,
+    mimeType: null,
+  },
 };
 
 // const maryDiograph = JSON.parse(diographMaryJson)
@@ -56,9 +60,10 @@ const diorySlice = createSlice({
         action.payload.focusId,
         action.payload.storyId
       );
+      console.log("oldstate", state);
       console.log("newStat", newState);
-      state = { ...state, ...newState };
-      state.prevId = newState.focusDiory.text;
+      state.diory = { ...state.diory, ...newState };
+      state.diory.prevId = newState.focusDiory.text;
       console.log("state", state);
     },
   },
