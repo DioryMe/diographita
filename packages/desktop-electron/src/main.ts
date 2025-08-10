@@ -62,10 +62,19 @@ ipcMain.handle(
   async (event, focusId: string, storyId?: string | null) => {
     try {
       const dioryInfo = getDioryInfo(focusId, storyId);
-      console.log("dioryInfo", dioryInfo.focus.linkedDiories);
-      // const safeData = JSON.parse(JSON.stringify(dioryInfo));
-      // console.log("dioryInfo2", dioryInfo.focus.linkedDiories);
-      return { success: true, data: dioryInfo };
+      const dioryState = {
+        focusId: dioryInfo.focusId,
+        focusDiory: dioryInfo.focusDiory,
+        storyId: dioryInfo.storyId,
+        storyDiory: dioryInfo.story,
+        storyDiories: dioryInfo.focus.linkedDiories,
+        prevId: dioryInfo.prev,
+        nextId: dioryInfo.next,
+        stories: dioryInfo.stories,
+        CID: dioryInfo.focus.data?.contentUrl,
+        mime: dioryInfo.focus.data?.encodingFormat,
+      };
+      return { success: true, data: dioryState };
     } catch (error) {
       console.log("errr", error);
 

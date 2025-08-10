@@ -36,13 +36,13 @@ Pitää pystyä toteuttamaan myös tietokannassa
 
 ```ts
 interface DioryState {
-  diory: IDioryObject | null;
+  diory: IDioryObject | null; // ???
   focusId: string | null;
-  storyId: string | null;
-  storyDiories: IDioryObject[];
-  prevId: string;
-  nextId: string;
-  stories: IDioryObject[];
+  storyId: string | null; // currently selected story
+  storyDiories: IDioryObject[]; // focusId's linked diories
+  prevId: string; // previous diory in story
+  nextId: string; // next diory in story
+  stories: IDioryObject[]; // available stories which focusId is part of
   CID: string;
   mimeType: string;
 }

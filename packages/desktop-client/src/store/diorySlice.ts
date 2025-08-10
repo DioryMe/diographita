@@ -6,8 +6,8 @@ interface DioryState {
   focus: {
     focusDiory: IDioryObject | null;
     storyDiory: IDioryObject | null;
-    // focusId: string | null; => focusDiory.id
-    // storyId: string | null; => storyDiory.id
+    focusId: string | null;
+    storyId: string | null;
     storyDiories: IDioryObject[];
     prevId: string | null;
     nextId: string | null;
@@ -23,6 +23,8 @@ const initialState: DioryState = {
   focus: {
     focusDiory: null,
     storyDiory: null,
+    focusId: null,
+    storyId: null,
     storyDiories: [],
     prevId: null,
     nextId: null,
@@ -49,7 +51,6 @@ export const fetchDioryInfo = createAsyncThunk(
     try {
       const result = await window.electronAPI.getDioryInfo(focusId, storyId);
       dispatch(setFocus2({ newState: result.data }));
-      return result.data;
     } catch (error) {
       console.error("fetchDioryInfo error", error);
     }

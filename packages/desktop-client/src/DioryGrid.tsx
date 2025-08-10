@@ -1,17 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 
 interface DioryGridProps {}
 
 const DioryGrid: React.FC<DioryGridProps> = () => {
-  const { stories: diories } = useSelector(
+  const { storyDiories: diories } = useSelector(
     (state: RootState) => state.diory.focus
   );
-
-  useEffect(() => {
-    console.log("diories", diories);
-  }, [diories]);
 
   return (
     <div

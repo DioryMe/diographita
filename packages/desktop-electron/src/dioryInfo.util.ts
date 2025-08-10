@@ -1,6 +1,6 @@
 import { Diograph } from "@diograph/diograph";
 const diographMaryJson = require("../../desktop-client/mary-json.json");
-import { IDataObject, IDiory, IDioryObject } from "@diograph/diograph/types";
+import { IDataObject, IDioryObject } from "@diograph/diograph/types";
 
 export interface DioryInfo {
   focusId: string;
