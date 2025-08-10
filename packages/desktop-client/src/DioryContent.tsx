@@ -3,50 +3,60 @@ import { useSelector, useDispatch } from "react-redux"; // updated import for di
 import { RootState } from "./store/store";
 import { setFocus } from "./store/diorySlice";
 import { useEffect } from "react";
+import { FiImage, FiRefreshCcw, FiVideo } from "react-icons/fi";
 // import styles from "./ContentSwipes.module.css";
 
 // import { loadDioryContent } from "./store/diorySlice";
 // import { FiImage, FiRefreshCcw, FiVideo } from "react-icons/fi";
 
+// export const DioryContent = () => {
+//   const dispatch = useDispatch();
+
+//   const { focusDiory } = useSelector((state: RootState) => state.diory.diory);
+
+//   useEffect(() => {
+//     dispatch(setFocus({ focusId: "asdf" }));
+//   }, [dispatch]);
+
+//   if (focusDiory) {
+//     return <div>{focusDiory.text}</div>;
+//   }
+
+//   return "Loading...";
+// };
+
 export const DioryContent = () => {
   const dispatch = useDispatch();
 
-  const { focusDiory } = useSelector((state: RootState) => state.diory.diory);
+  const {
+    focusDiory: diory,
+    storyId,
+    focusId,
+    prevId,
+    nextId,
+    contentUrls,
+  } = useSelector((state: RootState) => state.diory.diory);
 
   useEffect(() => {
     dispatch(setFocus({ focusId: "asdf" }));
   }, [dispatch]);
 
-  if (focusDiory) {
-    return <div>{focusDiory.text}</div>;
-  }
-
-  return "Loading...";
-};
-/*
-export const DioryContent = () => {
-  const dispatch = useDispatch();
-
-  const { diory, storyId, focusId, prevId, nextId, contentUrls } = useSelector(
-    (state: RootState) => state.diory
-  );
-
-  const dioryContent = contentUrls[diory.id];
+  const dioryContent = null; //  diory && contentUrls[diory.id];
 
   // Use the new contentUrlLoading state which tracks the status, error and loadedContentUrl
-  const contentLoadingState = useSelector(
-    (state: RootState) => state.diory.contentUrlLoading[diory.id]
-  );
-  const loadingStatus = contentLoadingState?.status;
+  // const contentLoadingState = useSelector(
+  //   (state: RootState) => state.diory.contentUrlLoading[diory.id]
+  // );
+  const loadingStatus: any = "loading"; // contentLoadingState?.status;
 
   // Determine if the diory is a video using its encodingFormat from diory.data
   const isVideo =
-    diory.data && diory.data[0] && diory.data[0].encodingFormat
+    diory && diory.data && diory.data[0] && diory.data[0].encodingFormat
       ? diory.data[0].encodingFormat.startsWith("video")
       : false;
 
   // Choose which media to render: if loading is fulfilled, use loadedContentUrl; otherwise use fallback diory.image
-  const mediaElement = (
+  const mediaElement = diory && (
     // dioryContent && dioryContent.url && loadingStatus === "fulfilled" ? (
     //   isVideo ? (
     //     <video controls loop style={{ maxHeight: "90vh", width: "100%" }}>
@@ -63,55 +73,54 @@ export const DioryContent = () => {
 
   // Trigger loading if not currently loading (or if load was rejected and a retry is desired)
   const handleLoadContent = () => {
-    if (!(dioryContent && dioryContent.url) || loadingStatus !== "loading") {
-      dispatch(loadDioryContent(diory) as any);
-    }
+    // if (!(dioryContent && dioryContent.url) || loadingStatus !== "loading") {
+    //   dispatch(loadDioryContent(diory) as any);
+    // }
   };
-*/
 
-// return (
-//   <div
-//     className={styles.fullImage}
-//     style={{ cursor: "grab", position: "relative" }}
-//   >
-//     <div className="swiper-zoom-container" style={{ position: "relative" }}>
-//       {mediaElement}
-//       {/* Show an overlay icon when the content is not yet fulfilled */}
-//       {(!(dioryContent && dioryContent.url) ||
-//         loadingStatus !== "fulfilled") && (
-//         <div
-//           onClick={handleLoadContent}
-//           style={{
-//             position: "absolute",
-//             top: 8,
-//             right: 8,
-//             cursor: "pointer",
-//             zIndex: 10,
-//           }}
-//         >
-//           {loadingStatus === "loading" ? (
-//             // Spinner animation when loading
-//             <div
-//               style={{
-//                 width: 24,
-//                 height: 24,
-//                 border: "4px solid #f3f3f3",
-//                 borderTop: "4px solid #3498db",
-//                 borderRadius: "50%",
-//                 animation: "spin 1s linear infinite",
-//               }}
-//             />
-//           ) : loadingStatus === "rejected" ? (
-//             // Retry icon for a rejected load; colored red as an indicator
-//             <FiRefreshCcw size={24} color="red" />
-//           ) : isVideo ? (
-//             <FiVideo size={48} />
-//           ) : (
-//             <FiImage size={48} />
-//           )}
-//         </div>
-//       )}
-//     </div>
-//   </div>
-// );
-// };
+  return (
+    <div
+      // className={styles.fullImage}
+      style={{ cursor: "grab", position: "relative" }}
+    >
+      <div className="swiper-zoom-container" style={{ position: "relative" }}>
+        {mediaElement}
+        {/* Show an overlay icon when the content is not yet fulfilled */}
+        {(!(dioryContent && dioryContent.url) ||
+          loadingStatus !== "fulfilled") && (
+          <div
+            onClick={handleLoadContent}
+            style={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+              cursor: "pointer",
+              zIndex: 10,
+            }}
+          >
+            {loadingStatus === "loading" ? (
+              // Spinner animation when loading
+              <div
+                style={{
+                  width: 24,
+                  height: 24,
+                  border: "4px solid #f3f3f3",
+                  borderTop: "4px solid #3498db",
+                  borderRadius: "50%",
+                  animation: "spin 1s linear infinite",
+                }}
+              />
+            ) : loadingStatus === "rejected" ? (
+              // Retry icon for a rejected load; colored red as an indicator
+              <FiRefreshCcw size={24} color="red" />
+            ) : isVideo ? (
+              <FiVideo size={48} />
+            ) : (
+              <FiImage size={48} />
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
