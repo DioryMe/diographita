@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import diographMaryJson from "../../mary-json.json";
 
 interface DioryState {
-  diory: {
+  focus: {
     focusDiory: IDioryObject | null;
     storyDiory: IDioryObject | null;
     // focusId: string | null; => focusDiory.id
@@ -18,7 +18,7 @@ interface DioryState {
 }
 
 const initialState: DioryState = {
-  diory: {
+  focus: {
     focusDiory: null,
     storyDiory: null,
     storyDiories: [],
@@ -58,7 +58,7 @@ const diorySlice = createSlice({
         action.payload.focusId,
         action.payload.storyId
       );
-      state.diory = { ...state.diory, ...newState };
+      state.focus = { ...state.focus, ...newState };
     },
   },
 });

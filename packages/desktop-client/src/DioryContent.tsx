@@ -12,7 +12,7 @@ import { FiImage, FiRefreshCcw, FiVideo } from "react-icons/fi";
 // export const DioryContent = () => {
 //   const dispatch = useDispatch();
 
-//   const { focusDiory } = useSelector((state: RootState) => state.diory.diory);
+//   const { focusDiory } = useSelector((state: RootState) => state.diory.focus);
 
 //   useEffect(() => {
 //     dispatch(setFocus({ focusId: "asdf" }));
@@ -35,7 +35,7 @@ export const DioryContent = () => {
     prevId,
     nextId,
     contentUrls,
-  } = useSelector((state: RootState) => state.diory.diory);
+  } = useSelector((state: RootState) => state.diory.focus);
 
   useEffect(() => {
     dispatch(setFocus({ focusId: "asdf" }));

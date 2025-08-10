@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DioryContent } from "./DioryContent";
+import DioryGrid from "./DioryGrid";
 
 const App: React.FC = () => {
   const [content, setContent] = useState("-");
@@ -27,6 +28,7 @@ const App: React.FC = () => {
       <div>{folderPath}</div>
       <button onClick={handleSelectFolder}>Select folder</button>
       <DioryContent />
+      {/* <DioryGrid diories={} /> */}
     </div>
   );
 };
