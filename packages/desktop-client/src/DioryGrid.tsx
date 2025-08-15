@@ -2,9 +2,11 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 
-interface DioryGridProps {}
+interface DioryGridProps {
+  onClick: (focusId: string) => void;
+}
 
-const DioryGrid: React.FC<DioryGridProps> = () => {
+const DioryGrid: React.FC<DioryGridProps> = ({ onClick }) => {
   const { storyDiories: diories } = useSelector(
     (state: RootState) => state.diory.focus
   );
@@ -27,6 +29,7 @@ const DioryGrid: React.FC<DioryGridProps> = () => {
             padding: "12px",
             backgroundColor: "#fff",
           }}
+          onClick={() => onClick(diory.id)}
         >
           {diory.image && (
             <img
