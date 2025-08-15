@@ -2,8 +2,15 @@ import { IPC_ACTIONS } from "@diographita/core";
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import { join } from "path";
 import { getDioryInfo } from "./dioryInfo.util";
+import { Diograph } from "@diograph/diograph";
+import { IDiographObject } from "@diograph/diograph/types";
+import { readFile } from "fs/promises";
+import { validateDiograph } from "@diograph/diograph/validator";
 
 let mainWindow: BrowserWindow;
+
+const diographs: Record<string, IDiographObject> = {};
+let folderPathInFocus: string | null = null;
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
@@ -42,12 +49,27 @@ app.on("window-all-closed", () => {
 
 ipcMain.handle(IPC_ACTIONS.SELECT_FOLDER, async () => {
   const result = await dialog.showOpenDialog(mainWindow, {
-    properties: ["openDirectory"],
+    // properties: ["openDirectory"],
+    properties: ["openFile"],
   });
 
   if (!result.canceled && result.filePaths.length > 0) {
     const folderPath = result.filePaths[0];
-    return { success: true, data: folderPath };
+
+    // TODO: Move to non-blocking thread
+    try {
+      const jsonContent = await readFile(folderPath, { encoding: "utf8" });
+      const diographObject = JSON.parse(jsonContent);
+      validateDiograph(diographObject);
+
+      if (diographObject) {
+        diographs[folderPath] = diographObject;
+        folderPathInFocus = folderPath;
+        return { success: true, data: folderPath };
+      }
+    } catch (error) {
+      return { success: false, error };
+    }
   }
 
   return { success: false, error: "No folder selected" };
@@ -60,9 +82,18 @@ ipcMain.handle(IPC_ACTIONS.HELLO_WORLD, async () => {
 ipcMain.handle(
   IPC_ACTIONS.GET_DIORY_INFO,
   async (event, focusId: string, storyId?: string | null) => {
+    // const diographMaryJson = require("../../desktop-client/diograph.json");
+    if (!folderPathInFocus || !diographs[folderPathInFocus]) {
+      return {
+        success: false,
+        error: "No folder selected",
+      };
+    }
+
+    const diograph = new Diograph(diographs[folderPathInFocus]);
+
     try {
-      const focusId = "e07c2f1d-5f5a-488a-a505-34f7b9f55105";
-      const dioryInfo = getDioryInfo(focusId, storyId);
+      const dioryInfo = getDioryInfo(diograph, focusId, storyId);
       const dioryState = {
         focusId: dioryInfo.focusId,
         focusDiory: dioryInfo.focusDiory,

@@ -28,7 +28,7 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchDioryInfo({ focusId: "HARDCODED IN BACKEND" }));
+    dispatch(fetchDioryInfo({ focusId: "/" }));
   }, [dispatch]);
 
   return (

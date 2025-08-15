@@ -1,6 +1,5 @@
 import { Diograph } from "@diograph/diograph";
-const diographMaryJson = require("../../desktop-client/mary-json.json");
-import { IDataObject, IDioryObject } from "@diograph/diograph/types";
+import { IDataObject, IDiograph, IDioryObject } from "@diograph/diograph/types";
 
 export interface DioryInfo {
   focusId: string;
@@ -22,10 +21,10 @@ export interface DioryInfo {
 }
 
 export const getDioryInfo = (
+  diograph: IDiograph,
   focusId: string = "/",
   storyId?: string | null
 ): DioryInfo => {
-  const diograph = new Diograph(diographMaryJson);
   const focusDiory = diograph.getDiory({ id: focusId });
   const { text, image, latlng, date, data } = focusDiory;
 
