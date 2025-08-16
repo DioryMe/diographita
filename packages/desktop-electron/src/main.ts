@@ -1,5 +1,6 @@
 import { IPC_ACTIONS } from "@diographita/core";
-import { app, BrowserWindow, dialog, ipcMain } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, protocol, net } from "electron";
+import { pathToFileURL } from "url";
 import { join } from "path";
 import { getDioryInfo } from "./dioryInfo.util";
 import { Diograph } from "@diograph/diograph";
@@ -11,6 +12,10 @@ let mainWindow: BrowserWindow;
 
 const diographs: Record<string, IDiographObject> = {};
 let folderPathInFocus: string | null = null;
+const filePathMapping: Record<string, string> = {
+  abcdefghijklmn: "/Users/Jouni/MyPictures/my-pic.jpg",
+  video: "/Users/Jouni/MyPictures/2022-12-26 18.34.04.mp4",
+};
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
@@ -31,7 +36,35 @@ const createWindow = () => {
   // }
 };
 
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: "app",
+    privileges: {
+      standard: true,
+      secure: true,
+      allowServiceWorkers: true,
+      supportFetchAPI: true,
+      corsEnabled: true,
+      stream: true, // Important for seekable media
+    },
+  },
+]);
+
 app.whenReady().then(() => {
+  protocol.handle("app", (request) => {
+    const parsedUrl = new URL(request.url);
+    const cid = parsedUrl.hostname;
+    const filePath = filePathMapping[cid];
+
+    if (!filePath) {
+      return new Response("File not found", { status: 404 });
+    }
+
+    // Use pathToFileURL to ensure proper file:// URL format
+    const fileUrl = pathToFileURL(filePath).href;
+    return net.fetch(fileUrl);
+  });
+
   createWindow();
 
   app.on("activate", () => {

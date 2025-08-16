@@ -33,6 +33,8 @@ const App: React.FC = () => {
 
   return (
     <div>
+      <video src="app://video" controls style={{ maxWidth: "100%" }} />
+      <img src="app://abcdefghijklmn" alt="My image" />
       <div>{content}</div>
       <div>{folderPath}</div>
       <button onClick={handleSelectFolder}>Select folder</button>
