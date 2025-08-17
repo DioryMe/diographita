@@ -51,6 +51,8 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 app.whenReady().then(() => {
+  loadDiograph("../desktop-client/diograph.json");
+
   protocol.handle("app", (request) => {
     const parsedUrl = new URL(request.url);
     const cid = parsedUrl.hostname;
@@ -80,6 +82,17 @@ app.on("window-all-closed", () => {
   }
 });
 
+const loadDiograph = async (folderPath: string) => {
+  const jsonContent = await readFile(folderPath, { encoding: "utf8" });
+  const diographObject = JSON.parse(jsonContent);
+  validateDiograph(diographObject);
+
+  if (diographObject) {
+    diographs[folderPath] = diographObject;
+    folderPathInFocus = folderPath;
+  }
+};
+
 ipcMain.handle(IPC_ACTIONS.SELECT_FOLDER, async () => {
   const result = await dialog.showOpenDialog(mainWindow, {
     // properties: ["openDirectory"],
@@ -91,15 +104,8 @@ ipcMain.handle(IPC_ACTIONS.SELECT_FOLDER, async () => {
 
     // TODO: Move to non-blocking thread
     try {
-      const jsonContent = await readFile(folderPath, { encoding: "utf8" });
-      const diographObject = JSON.parse(jsonContent);
-      validateDiograph(diographObject);
-
-      if (diographObject) {
-        diographs[folderPath] = diographObject;
-        folderPathInFocus = folderPath;
-        return { success: true, data: folderPath };
-      }
+      await loadDiograph(folderPath);
+      return { success: true, data: folderPath };
     } catch (error) {
       return { success: false, error };
     }
