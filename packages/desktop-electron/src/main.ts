@@ -4,9 +4,14 @@ import { pathToFileURL } from "url";
 import { join } from "path";
 import { getDioryInfo } from "./dioryInfo.util";
 import { Diograph } from "@diograph/diograph";
-import { IDiographObject } from "@diograph/diograph/types";
+import {
+  IDiographObject,
+  IDioryDateGeoSearchProps,
+  IDioryObject,
+} from "@diograph/diograph/types";
 import { readFile } from "fs/promises";
 import { validateDiograph } from "@diograph/diograph/validator";
+import { filterAndSortDiograph } from "./main.util";
 
 let mainWindow: BrowserWindow;
 
@@ -52,6 +57,12 @@ protocol.registerSchemesAsPrivileged([
 
 app.whenReady().then(() => {
   loadDiograph("../desktop-client/diograph.json");
+  loadDiograph("/Users/Jouni/MyPictures/Teini-nuoruus-room/diograph.json");
+  loadDiograph("/Users/Jouni/MyPictures/2020-room/diograph.json");
+  loadDiograph("/Users/Jouni/MyPictures/2021-room/diograph.json");
+  loadDiograph("/Users/Jouni/MyPictures/2022-room/diograph.json");
+  loadDiograph("/Users/Jouni/MyPictures/2023-room/diograph.json");
+  loadDiograph("/Users/Jouni/MyPictures/2024-room/diograph.json");
 
   protocol.handle("app", (request) => {
     const parsedUrl = new URL(request.url);
@@ -83,13 +94,15 @@ app.on("window-all-closed", () => {
 });
 
 const loadDiograph = async (folderPath: string) => {
+  const startTime = Date.now();
   const jsonContent = await readFile(folderPath, { encoding: "utf8" });
-  const diographObject = JSON.parse(jsonContent);
+  const diographObject: IDiographObject = JSON.parse(jsonContent);
   validateDiograph(diographObject);
 
   if (diographObject) {
     diographs[folderPath] = diographObject;
     folderPathInFocus = folderPath;
+    console.log(`Loaded ${folderPath} in ${Date.now() - startTime}ms. `);
   }
 };
 
@@ -144,6 +157,39 @@ ipcMain.handle(
     } catch (error) {
       console.log("errr", error);
 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      };
+    }
+  }
+);
+
+ipcMain.handle(
+  IPC_ACTIONS.GET_ARCHIVE_DIOGRAPH,
+  async (event, filter: IDioryDateGeoSearchProps) => {
+    const startTime = Date.now();
+    try {
+      // Compose archiveDiograph
+      const archiveDiograph = Object.values(diographs).reduce((acc, other) => {
+        acc.initialise(other);
+        return acc;
+      }, new Diograph());
+      console.log(`archiveDiograph composed in ${Date.now() - startTime}ms. `);
+
+      // Apply filter
+      const archiveDiories: IDioryObject[] = filterAndSortDiograph(
+        archiveDiograph,
+        filter
+      );
+
+      console.log(`archiveDiories generated in ${Date.now() - startTime}ms. `);
+
+      return {
+        success: true,
+        data: archiveDiories,
+      };
+    } catch (error) {
       return {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",

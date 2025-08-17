@@ -32,6 +32,7 @@ export interface IPCResponse<T = any> {
 export const IPC_ACTIONS = {
   SELECT_FOLDER: "SELECT_FOLDER",
   GET_DIORY_INFO: "GET_DIORY_INFO",
+  GET_ARCHIVE_DIOGRAPH: "GET_ARCHIVE_DIOGRAPH",
 } as const;
 
 export type IPCAction = keyof typeof IPC_ACTIONS;

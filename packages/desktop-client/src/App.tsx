@@ -4,6 +4,7 @@ import DioryGrid from "./DioryGrid";
 import { fetchDioryInfo } from "./store/diorySlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "./store/store";
+import ArchiveGrid from "./ArchiveGrid";
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,6 +24,7 @@ const App: React.FC = () => {
       <button onClick={handleSelectFolder}>Select folder</button>
       <DioryGrid onClick={(focusId) => dispatch(fetchDioryInfo({ focusId }))} />
       <DioryContent />
+      <ArchiveGrid />
     </div>
   );
 };
