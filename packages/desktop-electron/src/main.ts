@@ -114,14 +114,9 @@ ipcMain.handle(IPC_ACTIONS.SELECT_FOLDER, async () => {
   return { success: false, error: "No folder selected" };
 });
 
-ipcMain.handle(IPC_ACTIONS.HELLO_WORLD, async () => {
-  return "Hello world!123";
-});
-
 ipcMain.handle(
   IPC_ACTIONS.GET_DIORY_INFO,
   async (event, focusId: string, storyId?: string | null) => {
-    // const diographMaryJson = require("../../desktop-client/diograph.json");
     if (!folderPathInFocus || !diographs[folderPathInFocus]) {
       return {
         success: false,

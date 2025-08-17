@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { DioryContent } from "./DioryContent";
 import DioryGrid from "./DioryGrid";
 import { fetchDioryInfo } from "./store/diorySlice";
@@ -8,24 +8,9 @@ import { AppDispatch } from "./store/store";
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [content, setContent] = useState("-");
-  const [folderPath, setFolderPath] = useState("-");
-
   const handleSelectFolder = async () => {
-    window.electronAPI.selectFolder().then((result) => {
-      setFolderPath(
-        (result.success === true ? result.data : result.error) || "undefined"
-      );
-    });
+    window.electronAPI.selectFolder();
   };
-
-  useEffect(() => {
-    if (window.electronAPI) {
-      window.electronAPI.helloWorld().then((result: any) => {
-        setContent(result);
-      });
-    }
-  }, []);
 
   useEffect(() => {
     dispatch(fetchDioryInfo({ focusId: "/" }));
@@ -35,8 +20,6 @@ const App: React.FC = () => {
     <div>
       {/* <video src="app://video" controls style={{ maxWidth: "100%" }} />
       <img src="app://abcdefghijklmn" alt="My image" /> */}
-      <div>{content}</div>
-      <div>{folderPath}</div>
       <button onClick={handleSelectFolder}>Select folder</button>
       <DioryGrid onClick={(focusId) => dispatch(fetchDioryInfo({ focusId }))} />
       <DioryContent />
