@@ -12,6 +12,13 @@ declare global {
       getArchiveDiograph: (
         filter: IDioryDateGeoSearchProps
       ) => Promise<IPCResponse<IDioryObject[]>>;
+
+      // New settings methods
+      getArchiveRooms: () => Promise<IPCResponse<ArchiveRoom[]>>;
+      addArchiveRoom: (roomPath: string) => Promise<IPCResponse<ArchiveRoom[]>>;
+      removeArchiveRoom: (
+        roomId: string
+      ) => Promise<IPCResponse<ArchiveRoom[]>>;
     };
   }
 }

@@ -8,4 +8,11 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("GET_DIORY_INFO", focusId, storyId), // IPC_ACTIONS.GET_DIORY_INFO
   getArchiveDiograph: (filter: IDioryDateGeoSearchProps) =>
     ipcRenderer.invoke("GET_ARCHIVE_DIOGRAPH", filter), // IPC_ACTIONS.GET_ARCHIVE_DIOGRAPH
+
+  // Settings
+  getArchiveRooms: () => ipcRenderer.invoke("GET_ARCHIVE_ROOMS"),
+  addArchiveRoom: (roomPath: string) =>
+    ipcRenderer.invoke("ADD_ARCHIVE_ROOM", roomPath),
+  removeArchiveRoom: (roomId: string) =>
+    ipcRenderer.invoke("REMOVE_ARCHIVE_ROOM", roomId),
 });

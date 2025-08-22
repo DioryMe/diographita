@@ -12,6 +12,7 @@ import {
 import { readFile } from "fs/promises";
 import { validateDiograph } from "@diograph/diograph/validator";
 import { filterAndSortDiograph } from "./main.util";
+import { settingsManager } from "./settingsManager";
 
 let mainWindow: BrowserWindow;
 
@@ -55,15 +56,8 @@ protocol.registerSchemesAsPrivileged([
   },
 ]);
 
-app.whenReady().then(() => {
-  loadDiograph("../desktop-client/diograph.json");
-  loadDiograph("/Users/Jouni/MyPictures/Teini-nuoruus-room/diograph.json");
-  loadDiograph("/Users/Jouni/MyPictures/2020-room/diograph.json");
-  loadDiograph("/Users/Jouni/MyPictures/2021-room/diograph.json");
-  loadDiograph("/Users/Jouni/MyPictures/2022-room/diograph.json");
-  loadDiograph("/Users/Jouni/MyPictures/2023-room/diograph.json");
-  loadDiograph("/Users/Jouni/MyPictures/2024-room/diograph.json");
-
+app.whenReady().then(async () => {
+  await loadArchiveRoomsFromSettings();
   protocol.handle("app", (request) => {
     const parsedUrl = new URL(request.url);
     const cid = parsedUrl.hostname;
@@ -81,9 +75,7 @@ app.whenReady().then(() => {
   createWindow();
 
   app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
 
@@ -105,6 +97,28 @@ const loadDiograph = async (folderPath: string) => {
     console.log(`Loaded ${folderPath} in ${Date.now() - startTime}ms. `);
   }
 };
+
+const loadArchiveRoomsFromSettings = async () => {
+  try {
+    const archiveRooms = await settingsManager.getArchiveRooms();
+
+    for (const room of archiveRooms) {
+      try {
+        await loadDiograph(room.path);
+      } catch (error) {
+        console.error(`Failed to load archive room ${room.name}:`, error);
+      }
+    }
+  } catch (error) {
+    console.error("Failed to load settings:", error);
+  }
+};
+
+// ======
+
+// IPC ACTIONS
+
+// =====
 
 ipcMain.handle(IPC_ACTIONS.SELECT_FOLDER, async () => {
   const result = await dialog.showOpenDialog(mainWindow, {
@@ -193,6 +207,60 @@ ipcMain.handle(
       return {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
+      };
+    }
+  }
+);
+
+ipcMain.handle(IPC_ACTIONS.GET_ARCHIVE_ROOMS, async () => {
+  try {
+    const settings = await settingsManager.loadSettings();
+    return { success: true, data: settings.archiveRooms };
+  } catch (error) {
+    return {
+      success: false,
+      error:
+        error instanceof Error ? error.message : "Failed to get archive rooms",
+    };
+  }
+});
+
+ipcMain.handle(
+  IPC_ACTIONS.ADD_ARCHIVE_ROOM,
+  async (event, roomPath: string) => {
+    try {
+      const rooms = await settingsManager.addArchiveRoom(roomPath);
+      await loadDiograph(roomPath); // Load immediately
+      return { success: true, data: rooms };
+    } catch (error) {
+      return {
+        success: false,
+        error:
+          error instanceof Error ? error.message : "Failed to add archive room",
+      };
+    }
+  }
+);
+
+ipcMain.handle(
+  IPC_ACTIONS.REMOVE_ARCHIVE_ROOM,
+  async (event, roomId: string) => {
+    try {
+      const rooms = await settingsManager.removeArchiveRoom(roomId);
+      // Find and remove the diograph from memory
+      const settings = await settingsManager.loadSettings();
+      const removedRoom = settings.archiveRooms.find((r) => r.id === roomId);
+      if (removedRoom && diographs[removedRoom.path]) {
+        delete diographs[removedRoom.path];
+      }
+      return { success: true, data: rooms };
+    } catch (error) {
+      return {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to remove archive room",
       };
     }
   }
