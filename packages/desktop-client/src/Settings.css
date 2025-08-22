@@ -1,0 +1,113 @@
+.settings-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: sans-serif;
+}
+
+.settings-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.settings-section h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.archive-rooms-list {
+  margin-bottom: 20px;
+}
+
+.archive-room-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.room-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.room-name {
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.room-path {
+  font-size: 0.9em;
+  color: #666;
+  margin-left: 24px;
+  font-family: monospace;
+}
+
+.remove-room-btn {
+  background: #ff4757;
+  color: white;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-room-btn:hover {
+  background: #ff3742;
+}
+
+.add-room-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.add-room-input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.add-room-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.add-room-btn {
+  background: #2ed573;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-room-btn:hover {
+  background: #26d969;
+}
+
+.settings-loading,
+.settings-error {
+  text-align: center;
+  padding: 20px;
+  font-size: 16px;
+}
+
+.settings-error {
+  color: #ff4757;
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  border-radius: 4px;
+}
