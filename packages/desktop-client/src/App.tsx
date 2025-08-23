@@ -1,33 +1,30 @@
-import React, { useEffect } from "react";
-import { DioryContent } from "./DioryContent";
-import DioryGrid from "./DioryGrid";
-import { fetchDioryInfo } from "./store/diorySlice";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "./store/store";
-import ArchiveGrid from "./ArchiveGrid";
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Header from "./Header";
+import MyDiory from "./MyDiory";
+import Archives from "./Archives";
 import Settings from "./Settings";
 
 const App: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-
-  const handleSelectFolder = async () => {
-    window.electronAPI.selectFolder();
-  };
-
-  useEffect(() => {
-    dispatch(fetchDioryInfo({ focusId: "/" }));
-  }, [dispatch]);
-
   return (
-    <div>
-      {/* <video src="app://video" controls style={{ maxWidth: "100%" }} />
-      <img src="app://abcdefghijklmn" alt="My image" /> */}
-      <Settings />
-      {/* <button onClick={handleSelectFolder}>Select folder</button>
-      <DioryGrid onClick={(focusId) => dispatch(fetchDioryInfo({ focusId }))} />
-      <DioryContent />
-      <ArchiveGrid /> */}
-    </div>
+    <Router>
+      <div className="app">
+        <Header />
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<Navigate to="/my-diory" replace />} />
+            <Route path="/my-diory" element={<MyDiory />} />
+            <Route path="/archives" element={<Archives />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 };
 
