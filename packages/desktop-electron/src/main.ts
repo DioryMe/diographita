@@ -86,29 +86,38 @@ app.on("window-all-closed", () => {
 });
 
 const loadDiograph = async (folderPath: string) => {
-  const startTime = Date.now();
   const jsonContent = await readFile(folderPath, { encoding: "utf8" });
   const diographObject: IDiographObject = JSON.parse(jsonContent);
   validateDiograph(diographObject);
 
   if (diographObject) {
     diographs[folderPath] = diographObject;
-    folderPathInFocus = folderPath;
-    console.log(`Loaded ${folderPath} in ${Date.now() - startTime}ms. `);
   }
 };
 
 const loadArchiveRoomsFromSettings = async () => {
+  const startTime = Date.now();
   try {
     const archiveRooms = await settingsManager.getArchiveRooms();
 
-    for (const room of archiveRooms) {
-      try {
-        await loadDiograph(room.path);
-      } catch (error) {
-        console.error(`Failed to load archive room ${room.name}:`, error);
-      }
-    }
+    await Promise.all(
+      archiveRooms.map((room) => {
+        return new Promise((resolve, reject) => {
+          try {
+            loadDiograph(room.path).then((result) => {
+              resolve(result);
+            });
+          } catch (error) {
+            reject(
+              `Failed to load archive room ${room.name}: ${JSON.stringify(
+                error
+              )}`
+            );
+          }
+        });
+      })
+    );
+    console.log(`Loaded archiverooms in ${Date.now() - startTime}ms. `);
   } catch (error) {
     console.error("Failed to load settings:", error);
   }
@@ -144,6 +153,9 @@ ipcMain.handle(IPC_ACTIONS.SELECT_FOLDER, async () => {
 ipcMain.handle(
   IPC_ACTIONS.GET_DIORY_INFO,
   async (event, focusId: string, storyId?: string | null) => {
+    const settings = await settingsManager.loadSettings();
+    folderPathInFocus = settings.myDioryPath;
+    await loadDiograph(folderPathInFocus);
     if (!folderPathInFocus || !diographs[folderPathInFocus]) {
       return {
         success: false,

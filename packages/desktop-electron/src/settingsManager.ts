@@ -11,6 +11,7 @@ interface ArchiveRoom {
 
 interface AppSettings {
   archiveRooms: ArchiveRoom[];
+  myDioryPath: string;
 }
 
 export class SettingsManager {
@@ -26,7 +27,7 @@ export class SettingsManager {
       this.settings = this.parseINI(iniContent);
       return this.settings;
     } catch (error) {
-      this.settings = { archiveRooms: [] };
+      this.settings = { myDioryPath: "", archiveRooms: [] };
       await this.saveSettings(this.settings);
       return this.settings;
     }
@@ -80,6 +81,7 @@ export class SettingsManager {
   private parseINI(content: string): AppSettings {
     const lines = content.split("\n");
     const archiveRooms: ArchiveRoom[] = [];
+    let myDioryPath = "";
     let currentSection = "";
 
     for (const line of lines) {
@@ -99,16 +101,21 @@ export class SettingsManager {
             path: value.trim(),
           });
         }
+
+        if (currentSection === "My Diory") {
+          myDioryPath = value.trim();
+        }
       }
     }
 
     return {
       archiveRooms,
+      myDioryPath,
     };
   }
 
   private toINI(settings: AppSettings): string {
-    let content = "[Archive Rooms]\n";
+    let content = `[My Diory]\npath=${settings.myDioryPath}\n\n[Archive Rooms]\n`;
     settings.archiveRooms.forEach((room, index) => {
       content += `room${index + 1}=${room.path}\n`;
     });
