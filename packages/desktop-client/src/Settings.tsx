@@ -42,6 +42,10 @@ const Settings: React.FC = () => {
     // }
   };
 
+  const handleSelectFolder = async () => {
+    window.electronAPI.selectFolder();
+  };
+
   // if (loading)
   //   return <div className="settings-loading">Loading settings...</div>;
   // if (error) return <div className="settings-error">Error: {error}</div>;
@@ -55,6 +59,7 @@ const Settings: React.FC = () => {
       <section className="settings-section">
         <h2>Archive Rooms</h2>
 
+        <button onClick={handleSelectFolder}>Select folder</button>
         <div className="archive-rooms-list">
           {archiveRooms.map((room) => (
             <div key={room.id} className="archive-room-item">

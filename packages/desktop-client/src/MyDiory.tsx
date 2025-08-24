@@ -1,28 +1,19 @@
 import React, { useEffect } from "react";
-import { DioryContent } from "./DioryContent";
-import DioryGrid from "./DioryGrid";
 import { fetchDioryInfo } from "./store/diorySlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "./store/store";
+import { useNavigate } from "react-router-dom";
+import MyDioryHome from "./MyDioryHome";
 
 const MyDiory: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-
-  const handleSelectFolder = async () => {
-    window.electronAPI.selectFolder();
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchDioryInfo({ focusId: "/" }));
   }, [dispatch]);
 
-  return (
-    <div>
-      <button onClick={handleSelectFolder}>Select folder</button>
-      <DioryGrid onClick={(focusId) => dispatch(fetchDioryInfo({ focusId }))} />
-      <DioryContent />
-    </div>
-  );
+  return <MyDioryHome />;
 };
 
 export default MyDiory;
