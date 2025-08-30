@@ -8,6 +8,7 @@ interface DioryState {
     focusId: string | null;
     storyId: string | null;
     storyDiories: IDioryObject[];
+    storyLinkedDiories: IDioryObject[];
     prevId: string | null;
     nextId: string | null;
     stories: IDioryObject[];
@@ -25,6 +26,7 @@ const initialState: DioryState = {
     focusId: null,
     storyId: null,
     storyDiories: [],
+    storyLinkedDiories: [],
     prevId: null,
     nextId: null,
     stories: [],

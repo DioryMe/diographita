@@ -6,6 +6,7 @@ export interface DioryInfo {
   storyId: string | null;
   story: IDioryObject | null;
   stories: IDioryObject[];
+  storyLinkedDiories: IDioryObject[];
   prev: string | null;
   next: string | null;
   focus: {
@@ -65,6 +66,13 @@ export const getDioryInfo = (
     story: storyDioryId
       ? diograph.getDiory({ id: storyDioryId }).toObject()
       : null,
+    storyLinkedDiories: storyDioryId
+      ? diograph
+          .getDiory({ id: storyDioryId })
+          .links?.map((link) =>
+            diograph.getDiory({ id: link.id }).toObject()
+          ) || []
+      : [],
     stories: stories,
     prev,
     next,

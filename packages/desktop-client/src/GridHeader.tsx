@@ -13,6 +13,8 @@ const GridHeader = ({
 }) => {
   const navigate = useNavigate();
 
+  const storyLength = stories.length ? " (" + stories.length + ")" : "";
+
   return (
     <div
       style={{
@@ -31,10 +33,10 @@ const GridHeader = ({
         value={story.id || ""}
         onChange={(e) => handleStorySelect(e.target.value)}
       >
-        <option value="">Select a story</option>
+        {/* <option value="">{"Select a story" + storyLength}</option> */}
         {stories.map((story) => (
           <option key={story.id} value={story.id}>
-            {story.text}
+            {story.text + storyLength}
           </option>
         ))}
       </select>

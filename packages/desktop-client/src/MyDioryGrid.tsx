@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { RootState, AppDispatch } from "./store/store";
-import { fetchDioryInfo, selectStoryDiory } from "./store/diorySlice";
+import { fetchDioryInfo } from "./store/diorySlice";
 import GridHeader from "./GridHeader";
 import { IDioryObject } from "@diograph/diograph/types";
 
@@ -29,17 +29,16 @@ export function MyDioryGrid() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { dioryId } = useParams<{ dioryId: string }>();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const storyId = searchParams.get("storyId");
 
-  const { focus, loading } = useSelector((state: RootState) => state.diory);
+  const { focus } = useSelector((state: RootState) => state.diory);
 
   useEffect(() => {
     if (dioryId) {
-      const decodedDioryId = decodeURIComponent(dioryId);
       dispatch(
         fetchDioryInfo({
-          focusId: decodedDioryId,
+          focusId: dioryId,
           storyId: storyId || undefined,
         })
       );
@@ -47,46 +46,28 @@ export function MyDioryGrid() {
   }, [dispatch, dioryId, storyId]);
 
   const handleStorySelect = (selectedStoryId: string) => {
-    // Update URL with selected story
-    setSearchParams({ storyId: selectedStoryId });
-    // Update store selection
-    if (dioryId) {
-      dispatch(
-        selectStoryDiory({
-          focusId: decodeURIComponent(dioryId),
-          storyId: selectedStoryId,
-        })
-      );
-    }
+    navigate(`/my-diory/${focus.focusId}/grid?storyId=${selectedStoryId}`);
   };
 
-  const handleGridStoryClick = (clickedStory: IDioryObject) => {
-    navigate(`/my-diory/${clickedStory.id}/grid`);
+  const handleDioryClick = (clickedDiory: IDioryObject) => {
+    navigate(`/my-diory/${clickedDiory.id}/grid?storyId=${focus.storyId}`);
   };
 
   const handleEnlargedImageClick = () => {
-    // Navigate to content view
-    const currentStoryId = focus.storyId || focus.focusId;
-    navigate(
-      `/my-diory/${encodeURIComponent(
-        dioryId!
-      )}/content?storyId=${currentStoryId}`
-    );
+    navigate(`/my-diory/${focus.focusId}/content?storyId=${focus.storyId}`);
   };
 
-  if (loading || !focus.focusDiory) return <div>Loading...</div>;
-
-  const selectedStory = focus.focusDiory;
+  const focusDiory = focus.focusDiory;
 
   return (
     <>
       <GridHeader
         story={focus.storyDiory || focus.storyDiories[0]}
-        stories={focus.storyDiories}
+        stories={focus.stories}
         handleStorySelect={handleStorySelect}
       />
       {/* Enlarged selected item with fixed height container for stable layout */}
-      {selectedStory && (
+      {focusDiory && (
         <div
           style={{
             width: "100%",
@@ -98,17 +79,14 @@ export function MyDioryGrid() {
             justifyContent: "center",
           }}
         >
-          <div
-            // onClick={() => focusSelected(selectedItem.id)}
-            onClick={() => navigate("/my-diory/content")}
-          >
+          <div onClick={handleEnlargedImageClick}>
             <div style={{ position: "relative" }}>
-              {selectedStory.text && (
-                <div style={badgeStyle as any}>{selectedStory.text}</div>
+              {focusDiory.text && (
+                <div style={badgeStyle as any}>{focusDiory.text}</div>
               )}
               <img
-                src={selectedStory.image}
-                alt={selectedStory.id}
+                src={focusDiory.image}
+                alt={focusDiory.id}
                 style={{
                   maxWidth: "100%",
                   maxHeight: "100%",
@@ -121,24 +99,22 @@ export function MyDioryGrid() {
           </div>
         </div>
       )}
-
       {/* Grid of items with square cells, centered content, and a gray dot if item has links */}
       <div style={gridStyle}>
-        {focus.storyDiories.map((storyDiory) => (
+        {focus.storyLinkedDiories.map((diory) => (
           <div
-            key={storyDiory.id}
-            onClick={() => handleGridStoryClick(storyDiory)}
+            key={diory.id}
+            onClick={() => handleDioryClick(diory)}
             style={{
               position: "relative", // added for dot indicator positioning
-              border:
-                storyDiory.id === focus.focusId ? "2px solid blue" : "none",
+              border: diory.id === focus.focusId ? "2px solid blue" : "none",
               aspectRatio: "1", // square cell
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            {storyDiory.links && storyDiory.links.length > 0 && (
+            {diory.links && diory.links.length > 0 && (
               <div
                 style={{
                   position: "absolute",
@@ -152,7 +128,7 @@ export function MyDioryGrid() {
               />
             )}
             <img
-              src={storyDiory.image}
+              src={diory.image}
               style={{
                 maxWidth: "100%",
                 maxHeight: "100%",

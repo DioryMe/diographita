@@ -173,6 +173,7 @@ ipcMain.handle(
         storyId: dioryInfo.storyId,
         storyDiory: dioryInfo.story,
         storyDiories: dioryInfo.focus.linkedDiories,
+        storyLinkedDiories: dioryInfo.storyLinkedDiories,
         prevId: dioryInfo.prev,
         nextId: dioryInfo.next,
         stories: dioryInfo.stories,

@@ -3,23 +3,20 @@ import { useNavigate } from "react-router-dom";
 import { fetchDioryInfo } from "./store/diorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "./store/store";
-import { IDioryObject } from "@diograph/diograph/types";
 import { useEffect } from "react";
 
 export function MyDioryHome() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { focus, loading } = useSelector((state: RootState) => state.diory);
+  const { focus } = useSelector((state: RootState) => state.diory);
 
   useEffect(() => {
     dispatch(fetchDioryInfo({ focusId: "/", storyId: null }));
   }, [dispatch]);
 
-  const handleStoryClick = (storyDiory: IDioryObject) => {
-    navigate(`/my-diory/${storyDiory.id}/grid`);
+  const handleStoryClick = async (storyId: string) => {
+    navigate(`/my-diory/story?storyId=${storyId}`);
   };
-
-  if (loading) return <div>Loading...</div>;
 
   return (
     <div>
@@ -34,7 +31,7 @@ export function MyDioryHome() {
       >
         {focus.storyDiories.map((story) => (
           <div
-            onClick={() => handleStoryClick(story)}
+            onClick={() => handleStoryClick(story.id)}
             key={story.id}
             style={{
               display: "flex",

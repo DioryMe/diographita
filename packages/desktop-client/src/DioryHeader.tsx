@@ -4,11 +4,15 @@ import {
   FiChevronLeft,
   FiInfo,
 } from "react-icons/fi";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "./store/store";
 
 const DioryHeader = ({ contentSide, setContentSide }) => {
   const navigate = useNavigate();
   const headerItemStyle = { display: "inline-block", marginRight: "20px" };
+
+  const { focus } = useSelector((state: RootState) => state.diory);
 
   const swipeLeft = () => {
     /*
@@ -37,8 +41,9 @@ const DioryHeader = ({ contentSide, setContentSide }) => {
     <div>
       <div
         style={headerItemStyle}
-        onClick={() => navigate("/my-diory/grid")}
-        // onClick={() => navigate(`/diory/${focusId}/grid/?storyId=${storyId}`)}
+        onClick={() =>
+          navigate(`/my-diory/${focus.focusId}/grid/?storyId=${focus.storyId}`)
+        }
       >
         <FiChevronLeft size={48} style={{ cursor: "pointer" }} />
       </div>
