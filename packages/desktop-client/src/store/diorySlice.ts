@@ -49,7 +49,7 @@ export const fetchDioryInfo = createAsyncThunk(
   ) => {
     const response = await window.electronAPI.getDioryInfo(focusId, storyId);
     if (response.success) {
-      dispatch(setFocus({ newState: response.data }));
+      dispatch(setDioryState({ newState: response.data }));
     } else {
       throw new Error(response.error);
     }
@@ -57,7 +57,7 @@ export const fetchDioryInfo = createAsyncThunk(
 );
 export const selectStoryDiory = createAsyncThunk(
   "diory/selectStoryDiory",
-  async ({ focusId, storyId }: { focusId: string; storyId: string }) => {
+  async ({ focusId, storyId }: { focusId: string; storyId?: string }) => {
     const response = await window.electronAPI.getDioryInfo(focusId, storyId);
     if (response.success) {
       return response.data;
@@ -71,7 +71,10 @@ const diorySlice = createSlice({
   name: "diory",
   initialState,
   reducers: {
-    setFocus(state, action: PayloadAction<{ newState: DioryState["focus"] }>) {
+    setDioryState(
+      state,
+      action: PayloadAction<{ newState: DioryState["focus"] }>
+    ) {
       state.focus = { ...state.focus, ...action.payload.newState };
     },
   },
@@ -96,5 +99,5 @@ const diorySlice = createSlice({
   },
 });
 
-export const { setFocus } = diorySlice.actions;
+export const { setDioryState } = diorySlice.actions;
 export default diorySlice.reducer;

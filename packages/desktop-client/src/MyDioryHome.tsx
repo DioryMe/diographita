@@ -1,15 +1,25 @@
 import { useNavigate } from "react-router-dom";
 
-// import diograph from "../diograph.json";
-import { setFocus, setStory } from "./store/diorySlice";
+import { fetchDioryInfo } from "./store/diorySlice";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./store/store";
+import { AppDispatch, RootState } from "./store/store";
+import { IDioryObject } from "@diograph/diograph/types";
+import { useEffect } from "react";
 
-const MyDioryHome = () => {
+export function MyDioryHome() {
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { focus, loading } = useSelector((state: RootState) => state.diory);
 
-  const { storyDiories } = useSelector((state: RootState) => state.diory.focus);
+  useEffect(() => {
+    dispatch(fetchDioryInfo({ focusId: "/", storyId: null }));
+  }, [dispatch]);
+
+  const handleStoryClick = (storyDiory: IDioryObject) => {
+    navigate(`/my-diory/${storyDiory.id}/grid`);
+  };
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div>
@@ -22,8 +32,9 @@ const MyDioryHome = () => {
           gap: "16px",
         }}
       >
-        {storyDiories.map((story) => (
+        {focus.storyDiories.map((story) => (
           <div
+            onClick={() => handleStoryClick(story)}
             key={story.id}
             style={{
               display: "flex",
@@ -41,24 +52,6 @@ const MyDioryHome = () => {
                 alignItems: "center",
                 justifyContent: "center",
                 width: "100%",
-              }}
-              onClick={() => {
-                /*
-                    // TODO: Set first diory of the story in focus
-                    const firstDioryOfStory = Object.values(
-                      diograph[story.id].links
-                    )[0].id;
-                    dispatch(
-                      setFocus({
-                        focusId: firstDioryOfStory,
-                        storyId: story.id,
-                      })
-                    );
-                    navigate(
-                      `/diory/${firstDioryOfStory}/grid?storyId=${story.id}`
-                    );
-                    */
-                navigate("/my-diory/grid");
               }}
             >
               <img
@@ -79,6 +72,6 @@ const MyDioryHome = () => {
       </div>
     </div>
   );
-};
+}
 
 export default MyDioryHome;
