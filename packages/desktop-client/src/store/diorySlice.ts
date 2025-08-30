@@ -47,11 +47,22 @@ export const fetchDioryInfo = createAsyncThunk(
     },
     { dispatch }
   ) => {
-    try {
-      const result = await window.electronAPI.getDioryInfo(focusId, storyId);
-      dispatch(setFocus({ newState: result.data }));
-    } catch (error) {
-      console.error("fetchDioryInfo error", error);
+    const response = await window.electronAPI.getDioryInfo(focusId, storyId);
+    if (response.success) {
+      dispatch(setFocus({ newState: response.data }));
+    } else {
+      throw new Error(response.error);
+    }
+  }
+);
+export const selectStoryDiory = createAsyncThunk(
+  "diory/selectStoryDiory",
+  async ({ focusId, storyId }: { focusId: string; storyId: string }) => {
+    const response = await window.electronAPI.getDioryInfo(focusId, storyId);
+    if (response.success) {
+      return response.data;
+    } else {
+      throw new Error(response.error);
     }
   }
 );
@@ -64,32 +75,25 @@ const diorySlice = createSlice({
       state.focus = { ...state.focus, ...action.payload.newState };
     },
   },
-  // extraReducers: (builder) => {
-  //   builder
-  //     .addCase(fetchDioryInfo.pending, (state) => {
-  //       state.loading = true;
-  //       state.error = null;
-  //     })
-  //     .addCase(fetchDioryInfo.fulfilled, (state, action) => {
-  //       state.loading = false;
-  //       console.log("fetchDioryInfo.fulfilled", action.payload);
-  //       const dioryInfo = action.payload;
-  //       state.focus = {
-  //         focusDiory: dioryInfo.focusDiory,
-  //         storyDiory: dioryInfo.story,
-  //         storyDiories: [], // TODO: map from story links
-  //         prevId: dioryInfo.prev,
-  //         nextId: dioryInfo.next,
-  //         stories: dioryInfo.stories,
-  //         CID: null,
-  //         mimeType: null,
-  //       };
-  //     })
-  //     .addCase(fetchDioryInfo.rejected, (state, action) => {
-  //       state.loading = false;
-  //       state.error = action.error.message || "Failed to fetch diory info";
-  //     });
-  // },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchDioryInfo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchDioryInfo.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(fetchDioryInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Failed to fetch diory info";
+      })
+      .addCase(selectStoryDiory.fulfilled, (state, action) => {
+        state.focus = action.payload.focus;
+        state.loading = false;
+      });
+  },
 });
 
 export const { setFocus } = diorySlice.actions;
