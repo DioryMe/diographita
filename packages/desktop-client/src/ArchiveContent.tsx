@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "./store/store";
 import { closeArchiveOverlay } from "./store/archiveSlice";
+import "./ArchiveContent.css";
 
 function ArchiveContent() {
   const dispatch = useDispatch();

@@ -14,9 +14,12 @@ const gridStyle = {
 const itemStyle = {
   position: "relative",
   cursor: "pointer",
-  border: "1px solid #ccc",
+  display: "flex",
   borderRadius: "4px",
   overflow: "hidden",
+  objectFit: "contain",
+  justifyContent: "center",
+  alignItems: "center",
 };
 
 const ArchiveGrid = () => {
