@@ -4,6 +4,7 @@ import { fetchDioryInfo } from "./store/diorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "./store/store";
 import { useEffect } from "react";
+import "./MyDioryHome.css";
 
 export function MyDioryHome() {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,51 +20,16 @@ export function MyDioryHome() {
   };
 
   return (
-    <div>
-      <h2>HOME</h2>
-      {/* Two-column grid container */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: "16px",
-        }}
-      >
+    <div className="my-diory-home">
+      <div className="story-grid">
         {focus.storyDiories.map((story) => (
           <div
-            onClick={() => handleStoryClick(story.id)}
             key={story.id}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "space-between",
-              height: "300hw", // Adjust height as needed
-            }}
+            className="story-card"
+            onClick={() => handleStoryClick(story.id)}
           >
-            {/* Image container to center the image vertically */}
-            <div
-              style={{
-                flex: 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "100%",
-              }}
-            >
-              <img
-                src={story.image}
-                style={{
-                  maxWidth: "100%",
-                  maxHeight: "100%",
-                  cursor: "pointer",
-                }}
-              />
-            </div>
-            {/* Text container always at the bottom */}
-            <div style={{ marginBottom: "8px" }}>
-              <p style={{ margin: 0 }}>{story.text}</p>
-            </div>
+            <img src={story.image} alt={story.text} />
+            <h3>{story.text}</h3>
           </div>
         ))}
       </div>
