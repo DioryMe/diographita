@@ -5,25 +5,7 @@ import { RootState, AppDispatch } from "./store/store";
 import { fetchDioryInfo } from "./store/diorySlice";
 import GridHeader from "./GridHeader";
 import { IDioryObject } from "@diograph/diograph/types";
-
-export const gridStyle = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
-  gap: "10px",
-  padding: "10px",
-  marginTop: "30px",
-};
-
-const badgeStyle = {
-  position: "absolute",
-  top: "5px",
-  left: "5px",
-  padding: "2px 4px",
-  backgroundColor: "grey",
-  color: "#fff",
-  fontSize: "12px",
-  borderRadius: "2px",
-};
+import "./MyDioryGrid.css";
 
 export function MyDioryGrid() {
   const dispatch = useDispatch<AppDispatch>();
@@ -68,73 +50,34 @@ export function MyDioryGrid() {
       />
       {/* Enlarged selected item with fixed height container for stable layout */}
       {focusDiory && (
-        <div
-          style={{
-            width: "100%",
-            padding: "10px",
-            marginBottom: "10px",
-            height: "300px", // fixed height
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div onClick={handleEnlargedImageClick}>
-            <div style={{ position: "relative" }}>
+        <div className="enlarged-container">
+          <div
+            className="enlarged-image-wrapper"
+            onClick={handleEnlargedImageClick}
+          >
+            <div className="enlarged-image-content">
               {focusDiory.text && (
-                <div style={badgeStyle as any}>{focusDiory.text}</div>
+                <div className="diory-badge">{focusDiory.text}</div>
               )}
-              <img
-                src={focusDiory.image}
-                alt={focusDiory.id}
-                style={{
-                  maxWidth: "100%",
-                  maxHeight: "100%",
-                  objectFit: "contain",
-                  display: "block",
-                  margin: "auto",
-                }}
-              />
+              <img src={focusDiory.image} alt={focusDiory.id} />
             </div>
           </div>
         </div>
       )}
       {/* Grid of items with square cells, centered content, and a gray dot if item has links */}
-      <div style={gridStyle}>
+      <div className="my-diory-grid">
         {focus.storyLinkedDiories.map((diory) => (
           <div
-            key={diory.id}
+            className={`grid-item ${
+              diory.id === focus.focusId ? "selected" : ""
+            }`}
             onClick={() => handleDioryClick(diory)}
-            style={{
-              position: "relative", // added for dot indicator positioning
-              border: diory.id === focus.focusId ? "2px solid blue" : "none",
-              aspectRatio: "1", // square cell
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+            key={diory.id}
           >
             {diory.links && diory.links.length > 0 && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "5px",
-                  left: "5px",
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "50%",
-                  backgroundColor: "grey",
-                }}
-              />
+              <div className="link-indicator" />
             )}
-            <img
-              src={diory.image}
-              style={{
-                maxWidth: "100%",
-                maxHeight: "100%",
-                objectFit: "contain",
-              }}
-            />
+            <img src={diory.image} />
           </div>
         ))}
       </div>
