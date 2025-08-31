@@ -1,11 +1,11 @@
-import React from "react";
+import ArchiveContent from "./ArchiveContent";
 import ArchiveGrid from "./ArchiveGrid";
 
-const Archives: React.FC = () => {
+const Archives = () => {
   return (
-    <div>
-      <h1>Archives</h1>
+    <div className="archives">
       <ArchiveGrid />
+      <ArchiveContent />
     </div>
   );
 };

@@ -14,7 +14,14 @@ export interface ArchiveState {
 }
 
 const initialState: ArchiveState = {
-  filter: {},
+  // filter: {
+  //   latlngStart: "61.412517, 24.144045",
+  //   latlngEnd: "61.402413, 24.169763",
+  // },
+  filter: {
+    dateStart: "2022-05-01",
+    dateEnd: "2022-05-31",
+  },
   archiveDiories: [],
   selectedDiory: null,
   loading: false,
@@ -66,10 +73,6 @@ const archiveSlice = createSlice({
   },
 });
 
-export const {
-  setFilter,
-  selectArchiveDiory,
-  closeArchiveOverlay,
-  updateFilter,
-} = archiveSlice.actions;
+export const { setFilter, selectArchiveDiory, closeArchiveOverlay } =
+  archiveSlice.actions;
 export default archiveSlice.reducer;

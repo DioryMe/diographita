@@ -1,5 +1,9 @@
 import { IDioryObject } from "@diograph/diograph/types";
 import { useEffect, useState } from "react";
+import { fetchArchiveDiories, selectArchiveDiory } from "./store/archiveSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "./store/store";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const gridStyle = {
   display: "grid",
@@ -16,37 +20,68 @@ const itemStyle = {
 };
 
 const ArchiveGrid = () => {
-  const [dioryArray, setDioryArray] = useState<IDioryObject[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const overlayDioryId = searchParams.get("overlay");
+
+  const { filter, archiveDiories, loading } = useSelector(
+    (state: RootState) => state.archive
+  );
 
   useEffect(() => {
-    // Vehoniemi
-    const filter = {
-      latlngStart: "61.412517, 24.144045",
-      latlngEnd: "61.402413, 24.169763",
-    };
+    dispatch(fetchArchiveDiories(filter));
+  }, [dispatch, filter]);
 
-    window.electronAPI.getArchiveDiograph(filter).then((archiveDiograph) => {
-      if (archiveDiograph.success && archiveDiograph.data) {
-        setDioryArray(archiveDiograph.data);
+  useEffect(() => {
+    // Handle overlay from URL
+    if (overlayDioryId && archiveDiories.length > 0) {
+      const selectedDiory = archiveDiories.find((d) => d.id === overlayDioryId);
+      if (selectedDiory) {
+        dispatch(selectArchiveDiory(selectedDiory));
       }
-    });
-  }, []);
+    }
+  }, [overlayDioryId, archiveDiories, dispatch]);
+
+  const handleDioryClick = (diory: IDioryObject) => {
+    // Update URL and show overlay
+    navigate(`/archives?overlay=${encodeURIComponent(diory.id)}`);
+    dispatch(selectArchiveDiory(diory));
+  };
 
   return (
     <>
+      <div className="filter-header">
+        <div className="filter-display">
+          <h3>Current Filter:</h3>
+          <div className="filter-details">
+            {filter.dateStart && <span>From: {filter.dateStart}</span>}
+            {filter.dateEnd && <span>To: {filter.dateEnd}</span>}
+            {filter.latlngStart && filter.latlngEnd && (
+              <span>
+                Location: {filter.latlngStart}, {filter.latlngEnd}
+              </span>
+            )}
+            {Object.keys(filter).length === 0 && <span>No filter applied</span>}
+          </div>
+        </div>
+        <button className="edit-filter-btn">Edit</button>
+      </div>
       <div style={gridStyle}>
-        {dioryArray.map(({ id: dioryId, image }) => (
-          // TODO: Archiven diory linkattaisiin /archive/diory/...
-          <a key={dioryId} href={`/archive/diory/${dioryId}`}>
-            <div key={dioryId} style={itemStyle as any}>
-              <img
-                src={image}
-                alt={dioryId}
-                style={{ width: "100%", height: "auto" }}
-              />
-            </div>
-          </a>
+        {archiveDiories.map((diory) => (
+          <div
+            key={diory.id}
+            style={itemStyle as any}
+            onClick={() => handleDioryClick(diory)}
+          >
+            <img src={diory.image} style={{ width: "100%", height: "auto" }} />
+          </div>
         ))}
+        {archiveDiories.length === 0 && !loading && (
+          <div className="no-results">
+            No diories found matching the filter.
+          </div>
+        )}
       </div>
     </>
   );
